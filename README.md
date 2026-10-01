@@ -2,6 +2,9 @@
 
 Monorepo de artefatos de IA: steerings, settings, prompts, instruções e agentes customizados para múltiplas ferramentas. Serve como fonte da verdade para configurações globais reutilizáveis entre máquinas e projetos.
 
+> **Gerenciado pelo [dctx](https://github.com/emersonkopp/dev-context-cli)** — o CLI que instala,
+> sincroniza e mantém estes artefatos atualizados em cada máquina. Veja [Manutenção via dctx](#manutenção-via-dctx-recomendado).
+
 ## Ferramentas suportadas
 
 | Diretório | Ferramenta |
@@ -16,6 +19,7 @@ Monorepo de artefatos de IA: steerings, settings, prompts, instruções e agente
 dev-context/
 ├── kiro/
 │   ├── steering/       # Steerings globais (contexto persistente em todas as sessões)
+│   ├── skills/         # Skills globais (carregadas sob demanda por tema)
 │   ├── settings/       # Configurações do CLI sem credenciais
 │   ├── agents/
 │   │   └── custom/     # Definições de agentes customizados
@@ -38,9 +42,30 @@ Arquivos Markdown lidos automaticamente pelo Kiro como contexto persistente em t
 
 | Arquivo | Propósito |
 |---|---|
-| `non-functional-requirements.md` | Governança de RNFs e IA: guardrails de custo, formato EARS, isolamento técnico e questionário de discovery |
-| `testing-policy.md` | Diretrizes de TDD: ciclo Red/Green/Refactor, cobertura de edge cases, entrega de testes antes do código |
-| `auto-update-policy.md` | Requisitos de auto-update: feature toggle, canais stable/beta/alpha, comportamento por plataforma |
+| `00-pilares-arquitetura.md` | Pilares obrigatórios de arquitetura (segurança, privacidade, eficiência de infra, observabilidade, compatibilidade, testabilidade, manutenibilidade, resiliência, dados/migrações, operabilidade/deploy, documentação/decisões, acessibilidade/i18n) com checklist de fechamento |
+| `10-non-functional-requirements.md` | Governança de RNFs e IA: guardrails de custo, formato EARS, isolamento técnico e questionário de discovery |
+| `20-testing-policy.md` | Diretrizes de TDD: ciclo Red/Green/Refactor, cobertura de edge cases, entrega de testes antes do código |
+| `30-auto-update-policy.md` | Requisitos de auto-update: feature toggle, canais stable/beta/alpha, comportamento por plataforma |
+
+### kiro/skills/
+
+Skills do Kiro — guias carregados sob demanda (quando o tema é relevante, via a `description` do
+frontmatter). Cada skill é um diretório com um `SKILL.md`. Cobrem a validação dos pilares de
+arquitetura em qualquer linguagem.
+
+| Skill | Propósito |
+|---|---|
+| `validacao-seguranca` | Segredos, validação de entrada, injeção, authn/authz, criptografia, dependências |
+| `validacao-privacidade` | PII, LGPD/GDPR, minimização, logs sem dado pessoal, retenção |
+| `validacao-eficiencia-infra` | CPU, memória, banco (N+1/índices), rede/I/O, custo em nuvem |
+| `validacao-compatibilidade` | Breaking changes de contrato + impacto/auditoria de dependências |
+| `validacao-testabilidade` | Cobertura, pirâmide de testes, regressão, testes de contrato |
+| `validacao-manutenibilidade` | Legibilidade, complexidade, acoplamento, duplicação, dívida técnica |
+| `validacao-resiliencia` | Timeout/retry/circuit breaker, concorrência, graceful shutdown |
+| `validacao-dados-migracoes` | Integridade, transações, migrações reversíveis, backup/restore |
+| `validacao-operabilidade-deploy` | CI/CD, rollback, feature flags, config por ambiente (12-factor) |
+| `validacao-documentacao-decisoes` | README, ADRs, runbooks |
+| `validacao-acessibilidade-i18n` | Acessibilidade (WCAG) e internacionalização (quando há UI) |
 
 ### kiro/settings/
 
@@ -73,9 +98,37 @@ Veja `shared/README.md` para convenções de nomenclatura e estrutura de cabeça
 
 ---
 
+## Manutenção via dctx (recomendado)
+
+Este monorepo é gerenciado pelo CLI **[dctx](https://github.com/emersonkopp/dev-context-cli)**, que
+instala os artefatos nas localizações globais corretas, mantém tudo sincronizado com o GitHub e
+remove artefatos órfãos (renomeados/removidos) automaticamente.
+
+```bash
+# Primeira vez em uma máquina nova (instala o dctx + clona + configura tudo)
+curl -fsSL https://raw.githubusercontent.com/emersonkopp/dev-context-cli/main/install.sh | bash
+
+# No dia a dia
+dctx status     # o que está instalado e atualizado
+dctx install    # aplica os artefatos do monorepo no ambiente (idempotente; remove órfãos)
+dctx sync       # pull/push do monorepo com o GitHub
+```
+
+> **Skills de organização/cliente** mantidas apenas localmente (fora deste repo) **não** são
+> tocadas pelo `dctx` — ele só gerencia o que vem do monorepo.
+
 ## Setup em uma nova máquina
 
-### Kiro
+### Kiro (recomendado: via dctx)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/emersonkopp/dev-context-cli/main/install.sh | bash
+```
+
+Isso instala steerings, skills e settings do Kiro automaticamente. Para re-aplicar depois de um
+`git pull` no monorepo: `dctx install`.
+
+### Kiro (alternativa manual, sem dctx)
 
 ```bash
 # Clonar
@@ -84,9 +137,15 @@ git clone <url-do-repositório> ~/git/dev-context
 # Instalar steerings
 cp ~/git/dev-context/kiro/steering/*.md ~/.kiro/steering/
 
+# Instalar skills
+mkdir -p ~/.kiro/skills
+cp -r ~/git/dev-context/kiro/skills/* ~/.kiro/skills/
+
 # Aplicar settings (merge manual se já houver configurações locais)
 cp ~/git/dev-context/kiro/settings/cli.json ~/.kiro/settings/cli.json
 ```
+
+> A via manual não remove artefatos órfãos (renomeados/removidos). Prefira o `dctx` para isso.
 
 ### Copilot (VS Code)
 
@@ -121,7 +180,19 @@ As seguintes configurações contêm credenciais ou são específicas de cada am
 1. Crie `kiro/steering/nome.md`
 2. Inclua regras claras e acionáveis com cabeçalho `#` descrevendo o propósito
 3. Atualize a tabela acima neste README
-4. Sincronize: `cp kiro/steering/nome.md ~/.kiro/steering/`
+4. Sincronize: `dctx install` (aplica no ambiente e remove órfãos)
+
+### Adicionar uma skill do Kiro
+
+1. Crie `kiro/skills/nome-da-skill/SKILL.md`
+2. Inicie o arquivo com frontmatter YAML (`name` e `description`); a `description` deve conter
+   gatilhos claros, pois determina quando a skill é carregada sob demanda
+3. Atualize a tabela de skills acima neste README
+4. Sincronize: `dctx install`
+
+> **Nota:** skills específicas de uma organização/cliente (ex.: contratos internos) **não** devem
+> ir para este repositório — mantenha-as apenas localmente em `~/.kiro/skills/`. O `dctx` não as
+> remove, pois só gerencia o que vem do monorepo.
 
 ### Adicionar instruções do Copilot
 
