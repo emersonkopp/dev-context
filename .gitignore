@@ -1,0 +1,33 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Credenciais e segredos — NUNCA versionar
+*.key
+*.pem
+*.p12
+*.pfx
+*.secret
+.env
+.env.*
+secrets/
+credentials/
+
+# Arquivos de runtime do Kiro (não são artefatos gerenciáveis)
+# Somente os arquivos de configuração sem credenciais devem ser versionados
+settings/feed_state.json
+settings/survey_state.json
+
+# Artefatos compilados / caches
+__pycache__/
+*.pyc
+*.pyo
+.cache/
+node_modules/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
