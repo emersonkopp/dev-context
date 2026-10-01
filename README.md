@@ -1,101 +1,155 @@
 # dev-context
 
-Monorepo de artefatos de IA do Kiro: steerings, settings, prompts e agentes customizados. Serve como fonte da verdade para configurações globais reutilizáveis entre máquinas e projetos.
+Monorepo de artefatos de IA: steerings, settings, prompts, instruções e agentes customizados para múltiplas ferramentas. Serve como fonte da verdade para configurações globais reutilizáveis entre máquinas e projetos.
+
+## Ferramentas suportadas
+
+| Diretório | Ferramenta |
+|---|---|
+| `kiro/` | [Kiro](https://kiro.dev) — CLI de IA para desenvolvimento |
+| `copilot/` | [GitHub Copilot](https://github.com/features/copilot) |
+| `shared/` | Agnóstico — funciona com qualquer ferramenta |
 
 ## Estrutura
 
 ```
 dev-context/
-├── steering/          # Arquivos de steering global (guardrails e políticas)
-├── settings/          # Configurações do Kiro CLI sem credenciais
-├── prompts/           # Prompts reutilizáveis e templates
-├── agents/
-│   └── custom/        # Definições de agentes customizados
-└── docs/              # Documentação e guias
+├── kiro/
+│   ├── steering/       # Steerings globais (contexto persistente em todas as sessões)
+│   ├── settings/       # Configurações do CLI sem credenciais
+│   ├── agents/
+│   │   └── custom/     # Definições de agentes customizados
+│   └── prompts/        # Templates de prompts específicos do Kiro
+├── copilot/
+│   ├── instructions/   # Arquivos de instruções personalizadas
+│   └── prompts/        # Prompt files (.prompt.md) para Copilot Chat
+├── shared/
+│   └── prompts/        # Templates agnósticos de ferramenta
+└── docs/               # Documentação e guias gerais
 ```
 
-## Artefatos incluídos
+---
 
-### steering/
+## kiro/
 
-Arquivos Markdown que o Kiro lê automaticamente como contexto persistente em todas as sessões. Cada arquivo define um conjunto de regras, guardrails ou políticas para guiar o comportamento da IA.
+### kiro/steering/
+
+Arquivos Markdown lidos automaticamente pelo Kiro como contexto persistente em todas as sessões. Definem guardrails, políticas e comportamentos esperados.
 
 | Arquivo | Propósito |
 |---|---|
-| `non-functional-requirements.md` | Governança de RNFs e IA: guardrails de custo, formato EARS, isolamento técnico e questionário de discovery para arquitetura |
-| `testing-policy.md` | Diretrizes de TDD: ciclo Red/Green/Refactor, cobertura de edge cases e entrega do artefato de testes antes do código |
-| `auto-update-policy.md` | Requisitos do mecanismo de auto-update: feature toggle, canais de distribuição (stable/beta/alpha), comportamento por plataforma (Desktop e Mobile) |
+| `non-functional-requirements.md` | Governança de RNFs e IA: guardrails de custo, formato EARS, isolamento técnico e questionário de discovery |
+| `testing-policy.md` | Diretrizes de TDD: ciclo Red/Green/Refactor, cobertura de edge cases, entrega de testes antes do código |
+| `auto-update-policy.md` | Requisitos de auto-update: feature toggle, canais stable/beta/alpha, comportamento por plataforma |
 
-### settings/
+### kiro/settings/
 
-Configurações do Kiro CLI que podem ser compartilhadas entre máquinas. **Não contém credenciais** — veja a seção de setup abaixo para configurações que dependem do ambiente local.
+Configurações do Kiro CLI compartilháveis entre máquinas. **Sem credenciais.**
 
 | Arquivo | Conteúdo |
 |---|---|
-| `settings/cli.json` | `chat.enableAutoAgentUpgrade: true` — habilita atualização automática de agentes no chat |
+| `cli.json` | `chat.enableAutoAgentUpgrade: true` |
 
-### prompts/
+### kiro/agents/custom/
 
-Diretório para templates de prompts reutilizáveis. Adicione aqui prompts de sistema, templates de feature spec, prompts de code review, etc.
+Definições de agentes customizados. Cada subdiretório é um agente com configuração e instruções próprias.
 
-### agents/custom/
+---
 
-Definições de agentes customizados do Kiro. Cada subdiretório representa um agente com sua configuração e instruções específicas.
+## copilot/
+
+Veja `copilot/README.md` para detalhes de uso e convenções.
+
+- **`instructions/`** — instruções personalizadas para referenciar em `.github/copilot-instructions.md` ou via VS Code settings.
+- **`prompts/`** — arquivos `.prompt.md` para Copilot Chat.
+
+---
+
+## shared/
+
+Prompts e templates independentes de ferramenta — reutilizáveis com Kiro, Copilot, Cursor, Claude, etc.
+
+Veja `shared/README.md` para convenções de nomenclatura e estrutura de cabeçalho.
+
+---
 
 ## Setup em uma nova máquina
 
-### 1. Clonar o repositório
+### Kiro
 
 ```bash
+# Clonar
 git clone <url-do-repositório> ~/git/dev-context
+
+# Instalar steerings
+cp ~/git/dev-context/kiro/steering/*.md ~/.kiro/steering/
+
+# Aplicar settings (merge manual se já houver configurações locais)
+cp ~/git/dev-context/kiro/settings/cli.json ~/.kiro/settings/cli.json
 ```
 
-### 2. Instalar os steerings globalmente
-
-Copie os arquivos de steering para o diretório global do Kiro:
+### Copilot (VS Code)
 
 ```bash
-cp ~/git/dev-context/steering/*.md ~/.kiro/steering/
+# Instruções globais via settings.json do VS Code
+# Adicione em ~/.config/Code/User/settings.json (Linux) ou
+# ~/Library/Application Support/Code/User/settings.json (macOS):
+{
+  "github.copilot.chat.codeGeneration.instructions": [
+    { "file": "~/git/dev-context/copilot/instructions/nome.md" }
+  ]
+}
 ```
 
-### 3. Aplicar as settings do CLI
+### Configurações que NÃO estão neste repositório
 
-```bash
-cp ~/git/dev-context/settings/cli.json ~/.kiro/settings/cli.json
-```
+As seguintes configurações contêm credenciais ou são específicas de cada ambiente:
 
-> **Atenção:** Se o seu `~/.kiro/settings/cli.json` já tiver configurações adicionais (ex: credenciais ou tokens), faça um merge manual em vez de sobrescrever.
+| Ferramenta | Como configurar |
+|---|---|
+| Kiro | `kiro login` — token armazenado em `~/.kiro/crew/` |
+| GitHub Copilot | `gh auth login` — token gerenciado pelo keychain do SO |
+| AWS | `aws configure` ou variáveis `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` |
+| APIs de terceiros | Variáveis de ambiente ou gerenciador de segredos do SO |
 
-### 4. Configurações que NÃO estão neste repositório
-
-As seguintes configurações contêm credenciais ou são específicas de cada ambiente e **devem ser configuradas manualmente** em cada máquina:
-
-- **Autenticação do Kiro:** feita via `kiro login` — o token é armazenado em `~/.kiro/crew/` e nunca deve ser versionado.
-- **Integrações com AWS:** configure via `aws configure` ou variáveis de ambiente (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`).
-- **Chaves de API de terceiros** (OpenAI, Anthropic, etc.): configure via variáveis de ambiente ou no gerenciador de segredos do seu SO.
+---
 
 ## Como contribuir
 
-### Adicionar um novo steering
+### Adicionar um steering do Kiro
 
-1. Crie o arquivo em `steering/nome-do-steering.md`
-2. Use o formato Markdown com cabeçalho `#` descrevendo o propósito
-3. Inclua regras claras e acionáveis
-4. Atualize a tabela neste README
-5. Copie para `~/.kiro/steering/` na sua máquina
+1. Crie `kiro/steering/nome.md`
+2. Inclua regras claras e acionáveis com cabeçalho `#` descrevendo o propósito
+3. Atualize a tabela acima neste README
+4. Sincronize: `cp kiro/steering/nome.md ~/.kiro/steering/`
 
-### Adicionar um prompt
+### Adicionar instruções do Copilot
 
-1. Crie o arquivo em `prompts/` com extensão `.md` ou `.txt`
-2. Documente o contexto de uso no cabeçalho do arquivo
+1. Crie `copilot/instructions/nome.md`
+2. Documente o contexto de uso no cabeçalho
+3. Referencie nos projetos via `.github/copilot-instructions.md` ou VS Code settings
 
-### Adicionar um agente customizado
+### Adicionar um prompt compartilhado
 
-1. Crie um subdiretório em `agents/custom/nome-do-agente/`
-2. Inclua um `README.md` descrevendo o propósito e comportamento do agente
+1. Crie `shared/prompts/<categoria>-<nome>.md`
+2. Use o cabeçalho YAML descrito em `shared/README.md`
+
+### Adicionar um agente customizado do Kiro
+
+1. Crie `kiro/agents/custom/nome-do-agente/`
+2. Inclua `README.md` com propósito e comportamento
+
+### Adicionar suporte a nova ferramenta
+
+1. Crie um diretório raiz com o nome da ferramenta (ex: `cursor/`, `claude/`)
+2. Adicione um `README.md` explicando os tipos de artefatos suportados
+3. Atualize a tabela "Ferramentas suportadas" neste README
+
+---
 
 ## Princípios
 
-- **Sem credenciais no repositório.** Qualquer configuração que precise de chave, token ou senha deve ser gerenciada fora deste repo.
-- **Reutilizável entre projetos.** Os artefatos aqui são globais — evite configurações específicas de um projeto.
-- **Documentado.** Todo artefato novo deve ter seu propósito documentado aqui ou no próprio arquivo.
+- **Sem credenciais no repositório.** Chaves, tokens e senhas são gerenciados fora deste repo.
+- **Organizado por ferramenta.** Cada IA tem seu próprio namespace, evitando conflitos de convenção.
+- **Reutilizável entre projetos.** Os artefatos são globais — configurações específicas de projeto ficam no próprio projeto.
+- **Documentado.** Todo artefato novo deve ter propósito documentado aqui ou no próprio arquivo.
