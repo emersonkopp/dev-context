@@ -55,6 +55,7 @@ arquitetura em qualquer linguagem.
 
 | Skill | Propósito |
 |---|---|
+| `discovery` | Elicitação de requisitos (product discovery): perguntas estruturadas que geram um resumo para o `/speckit.specify` |
 | `validacao-seguranca` | Segredos, validação de entrada, injeção, authn/authz, criptografia, dependências |
 | `validacao-privacidade` | PII, LGPD/GDPR, minimização, logs sem dado pessoal, retenção |
 | `validacao-eficiencia-infra` | CPU, memória, banco (N+1/índices), rede/I/O, custo em nuvem |
