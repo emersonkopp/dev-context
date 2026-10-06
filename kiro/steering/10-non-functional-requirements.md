@@ -1,32 +1,34 @@
-# Kiro Steering: Governança de Requisitos Não Funcionais (RNFs) e IA
+# Governança de Requisitos Não Funcionais (RNFs)
 
-Este arquivo atua como um Guia de Contexto Persistente e Guardrail para o Kiro. Sempre que você, Kiro, estiver gerando ou refinando um arquivo `requirements.md` ou `design.md` para uma nova Feature Spec, você DEVE avaliar e aplicar as restrições abaixo.
+Ao gerar ou refinar `requirements.md` ou `design.md` em Feature Specs, aplique estas regras.
 
-## 🚨 Guardrails e Regras de Negócio de RNF
-1. **Validação de Exageros (Trade-off de Custos):** Se o prompt inicial pedir "máxima segurança", "disponibilidade contínua" ou "infraestrutura infalível", você DEVE interromper o fluxo automático e questionar explicitamente o desenvolvedor/PO no chat sobre o impacto financeiro (ex: custo duplo de computação para RTO próximo a zero).
-2. **Formato das Histórias:** Os requisitos de infraestrutura, performance e IA devem ser traduzidos para a notação EARS (Easy Approach to Requirements Syntax) dentro de `requirements.md` (Ex: "WHEN [condição] THE SYSTEM SHALL [ação]").
-3. **Isolamento Técnico:** Nenhuma feature de backend ou componente de IA pode ser aceito em `design.md` sem que haja uma estratégia clara de mocks de dados e isolamento técnico que garanta testes automatizados individuais do componente.
+## Guardrails
 
-## 📋 Questionário de Ativação Dinâmica (Discovery)
-Antes de gerar o código da feature e fechar o `requirements.md`, use o chat para garantir que as seguintes premissas de arquitetura e engenharia foram respondidas pelo time:
+1. **Trade-off de custo**: se o prompt pedir "máxima segurança", "disponibilidade contínua" ou similar, interrompa e questione o impacto financeiro antes de prosseguir.
+2. **Formato EARS**: requisitos de infra, performance e IA em `requirements.md` devem usar notação EARS: `WHEN [condição] THE SYSTEM SHALL [ação]`.
+3. **Isolamento para testes**: nenhuma feature de backend ou componente de IA aceito em `design.md` sem estratégia de mocks e isolamento que garanta testes automatizados individuais.
 
-### 1. Fronteiras de Plataforma
-* Se houver canal Mobile/Desktop: Como será tratada a retrocompatibilidade da API para versões antigas instaladas nos aparelhos?
-* Se houver Frontend Web: A página exige renderização no servidor (SSR) para SEO ou regras de acessibilidade estritas (WCAG)?
+## Questionário de discovery
 
-### 2. Volumetria, Desempenho e Resiliência
-* Qual é o P95 de tempo de resposta esperado para o fluxo principal desta funcionalidade?
-* Toda a infraestrutura necessária para suportar esta feature (novas tabelas, mensageria, buckets) DEVE ser descrita em scripts de Infraestrutura como Código (IaC - ex: Terraform). Configurações manuais de console são proibidas.
+Antes de gerar código e fechar o `requirements.md`, garanta respostas para as questões aplicáveis:
 
-### 3. Continuidade e Backup
-* Esta funcionalidade armazena ou manipula novos estados/dados críticos de negócio? Se sim, adicione ao `tasks.md` uma tarefa explícita para configurar rotinas automáticas de backup incremental e um plano documentado de restore.
-* Caso uma dependência externa falhe, a funcionalidade deve decair graciosamente (Graceful Degradation) sem derrubar o sistema inteiro.
+### Plataforma
+- Mobile/Desktop: como tratar retrocompatibilidade da API para versões antigas?
+- Web: SSR necessário para SEO ou a11y?
 
-### 4. Inteligência Artificial e Modelos de Linguagem (LLMs)
-* **Oportunidades de IA:** Existem pontos específicos nesta funcionalidade/software onde o uso de IA ou LLMs trará valor claro (ex: automação de tarefas, classificação de dados, resumos, chat)?
-* **Estratégia do Modelo (Treinamento Especializado):** Esta funcionalidade exige o treinamento/Fine-Tuning de uma LLM especializada com dados proprietários da empresa, ou o uso de técnicas de RAG (Retrieval-Augmented Generation) com APIs de modelos de mercado (OpenAI, Anthropic, Bedrock) é suficiente?
-* **Arquitetura de Execução (IA Offline):** É necessário que o recurso de IA funcione de forma 100% offline (ex: rodando modelos menores e otimizados como Llama/Gemma localmente no dispositivo mobile/desktop do usuário)? Se sim, descreva o impacto esperado na memória do dispositivo.
+### Performance e Infra
+- P95 de tempo de resposta esperado para o fluxo principal?
+- Toda infra nova (tabelas, filas, buckets) DEVE ser IaC (ex: Terraform). Configuração manual de console é proibida.
 
-### 5. Métricas e Testabilidade
-* Quais tags ou interceptores de Analytics (ex: eventos de funil) devem ser embutidos nesta feature para medir o uso pelo usuário?
-* Qual é o plano de Feature Toggles para que possamos testar essa funcionalidade em produção de forma isolada e segura apenas para usuários selecionados?
+### Continuidade
+- Dados críticos de negócio? → tarefa explícita para backup incremental + plano de restore.
+- Degradação graciosa obrigatória: falha de dependência externa não derruba o sistema.
+
+### IA/LLMs (quando aplicável)
+- Onde IA/LLM agrega valor claro nesta feature?
+- RAG com APIs de mercado é suficiente ou precisa de fine-tuning com dados proprietários?
+- Execução offline necessária (modelo local no dispositivo)? → documentar impacto de memória.
+
+### Métricas e rollout
+- Quais eventos de analytics embutir para medir uso?
+- Plano de feature toggles para teste isolado em produção?

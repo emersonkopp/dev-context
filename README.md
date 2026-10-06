@@ -42,20 +42,20 @@ Arquivos Markdown lidos automaticamente pelo Kiro como contexto persistente em t
 
 | Arquivo | Propósito |
 |---|---|
-| `00-pilares-arquitetura.md` | Pilares obrigatórios de arquitetura (segurança, privacidade, eficiência de infra, observabilidade, compatibilidade, testabilidade, manutenibilidade, resiliência, dados/migrações, operabilidade/deploy, documentação/decisões, acessibilidade/i18n) com checklist de fechamento |
-| `10-non-functional-requirements.md` | Governança de RNFs e IA: guardrails de custo, formato EARS, isolamento técnico e questionário de discovery |
-| `20-testing-policy.md` | Diretrizes de TDD: ciclo Red/Green/Refactor, cobertura de edge cases, entrega de testes antes do código |
-| `30-auto-update-policy.md` | Requisitos de auto-update: feature toggle, canais stable/beta/alpha, comportamento por plataforma |
+| `00-pilares-arquitetura.md` | 12 pilares obrigatórios de arquitetura com checklist de fechamento (tabela compacta); cada pilar tem uma skill `validacao-*` de aprofundamento |
+| `10-non-functional-requirements.md` | Governança de RNFs: guardrails de custo, formato EARS, isolamento para testes e questionário de discovery |
+| `20-testing-policy.md` | TDD: ciclo Red/Green/Refactor, cobertura de edge cases, testes antes do código |
 
 ### kiro/skills/
 
 Skills do Kiro — guias carregados sob demanda (quando o tema é relevante, via a `description` do
-frontmatter). Cada skill é um diretório com um `SKILL.md`. Cobrem a validação dos pilares de
-arquitetura em qualquer linguagem.
+frontmatter). Cada skill é um diretório com um `SKILL.md`. As skills `validacao-*` aprofundam os
+pilares de arquitetura; as demais cobrem fluxos específicos (discovery, auto-update, gestão do monorepo).
 
 | Skill | Propósito |
 |---|---|
 | `discovery` | Elicitação de requisitos (product discovery): perguntas estruturadas que geram um resumo para o `/speckit.specify` |
+| `auto-update` | Requisitos de referência para implementar auto-update (Desktop/Mobile): feature toggle, canais stable/beta/alpha, OTA |
 | `validacao-seguranca` | Segredos, validação de entrada, injeção, authn/authz, criptografia, dependências |
 | `validacao-privacidade` | PII, LGPD/GDPR, minimização, logs sem dado pessoal, retenção |
 | `validacao-eficiencia-infra` | CPU, memória, banco (N+1/índices), rede/I/O, custo em nuvem |
@@ -67,6 +67,7 @@ arquitetura em qualquer linguagem.
 | `validacao-operabilidade-deploy` | CI/CD, rollback, feature flags, config por ambiente (12-factor) |
 | `validacao-documentacao-decisoes` | README, ADRs, runbooks |
 | `validacao-acessibilidade-i18n` | Acessibilidade (WCAG) e internacionalização (quando há UI) |
+| `dev-context-manager` | Gerencia este monorepo pelo chat: instalar, sincronizar, status e criação de novos artefatos via `dctx` |
 
 ### kiro/settings/
 
