@@ -10,10 +10,11 @@ Revisa as alterações entre um **branch de origem** (contém a mudança) e um *
 (onde será mergeado), verifica atendimento aos **requisitos** e aos **pilares de arquitetura**, e
 gera um **relatório de pontos de melhoria** com links para o código relacionado.
 
-**Somente revisão.** Esta skill nunca altera código, nunca aplica correções e nunca sugere trechos
-de código ou mudanças a serem feitas. Não execute edições, commits, nem proponha patches. A **única**
-saída permitida é o relatório descrito no passo 5 — identificando problemas e seu impacto, sem
-prescrever a solução. Se o usuário pedir para corrigir, isso é outra tarefa fora desta skill.
+**Somente revisão.** Esta skill nunca altera código, nunca aplica correções e nunca executa edições,
+commits ou patches. A **única** saída permitida é o relatório descrito no passo 5. O relatório pode
+conter sugestões de mudança, mas apenas de forma **informativa** (para conhecimento), nunca como
+ação a ser executada por esta skill. Se o usuário pedir para corrigir, isso é outra tarefa fora
+desta skill.
 
 ## 1. Determinar o escopo da revisão
 
@@ -90,6 +91,7 @@ Ordenados por severidade (Crítico > Alto > Médio > Baixo).
 - **Pilar**: <pilar/requisito afetado>
 - **Local**: [`arquivo.ext:120-128`](<permalink>)
 - **Problema**: <o que está errado e qual o impacto>
+- **Sugestão (informativa)**: <possível caminho de correção, apenas para conhecimento — não aplicar>
 
 ## Pilares — resumo
 | Pilar | Status | Nota |
@@ -102,8 +104,9 @@ Ordenados por severidade (Crítico > Alto > Médio > Baixo).
 ## Regras de comportamento
 
 - **Severidade honesta.** Crítico = segurança/perda de dados/quebra em produção. Não infle nem minimize.
-- **Somente leitura.** Nunca altere, corrija ou proponha código/patches. Descreva o problema e o
-  impacto; não prescreva a solução. A entrega é exclusivamente o relatório.
+- **Somente leitura.** Nunca altere, corrija ou aplique código/patches. Sugestões de correção são
+  permitidas no relatório apenas como informação (campo "Sugestão (informativa)"), nunca executadas.
+  A entrega é exclusivamente o relatório.
 - **Específico.** Cada ponto identifica claramente o problema e seu impacto, com local no código.
 - **Baseado em evidência.** Toda afirmação sobre o código vem do diff/arquivos que você leu; não
   presuma comportamento que não verificou — diga o que não deu para verificar.
