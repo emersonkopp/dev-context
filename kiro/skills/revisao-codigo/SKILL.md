@@ -10,8 +10,10 @@ Revisa as alterações entre um **branch de origem** (contém a mudança) e um *
 (onde será mergeado), verifica atendimento aos **requisitos** e aos **pilares de arquitetura**, e
 gera um **relatório de pontos de melhoria** com links para o código relacionado.
 
-Não altera o código. A saída é o relatório. Só modifique código se o usuário pedir explicitamente
-depois de ver o relatório.
+**Somente revisão.** Esta skill nunca altera código, nunca aplica correções e nunca sugere trechos
+de código ou mudanças a serem feitas. Não execute edições, commits, nem proponha patches. A **única**
+saída permitida é o relatório descrito no passo 5 — identificando problemas e seu impacto, sem
+prescrever a solução. Se o usuário pedir para corrigir, isso é outra tarefa fora desta skill.
 
 ## 1. Determinar o escopo da revisão
 
@@ -87,8 +89,7 @@ Ordenados por severidade (Crítico > Alto > Médio > Baixo).
 ### [Severidade] Título curto do ponto
 - **Pilar**: <pilar/requisito afetado>
 - **Local**: [`arquivo.ext:120-128`](<permalink>)
-- **Problema**: <o que está errado e o impacto>
-- **Sugestão**: <mudança concreta recomendada>
+- **Problema**: <o que está errado e qual o impacto>
 
 ## Pilares — resumo
 | Pilar | Status | Nota |
@@ -101,7 +102,9 @@ Ordenados por severidade (Crítico > Alto > Médio > Baixo).
 ## Regras de comportamento
 
 - **Severidade honesta.** Crítico = segurança/perda de dados/quebra em produção. Não infle nem minimize.
-- **Acionável.** Cada ponto diz o que mudar, não só o que está errado.
+- **Somente leitura.** Nunca altere, corrija ou proponha código/patches. Descreva o problema e o
+  impacto; não prescreva a solução. A entrega é exclusivamente o relatório.
+- **Específico.** Cada ponto identifica claramente o problema e seu impacto, com local no código.
 - **Baseado em evidência.** Toda afirmação sobre o código vem do diff/arquivos que você leu; não
   presuma comportamento que não verificou — diga o que não deu para verificar.
 - **Respeite o escopo.** Revise a mudança, não reescreva o projeto. Dívida pré-existente fora do
