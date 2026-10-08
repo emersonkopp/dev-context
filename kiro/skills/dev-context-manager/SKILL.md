@@ -85,6 +85,11 @@ Baixa e substitui o binário em-place para a versão mais recente.
 
 ### 5. Criar um novo steering
 
+> **Antes de criar ou editar qualquer artefato (operações 5 a 8)**, aplique os princípios de
+> `kiro/steering/90-principios-artefatos.md`: responsabilidade única, texto acionável e conciso,
+> sem redundância (referencie outros artefatos em vez de copiar), gatilhos reais em skills e saída
+> esperada definida. Rode o checklist desse steering antes de salvar.
+
 Steerings são arquivos Markdown com regras/políticas persistentes que o Kiro lê automaticamente em todas as sessões.
 
 **Padrão de nomenclatura**: `NN-nome-do-steering.md` onde `NN` é o número de ordem (ex: `40-`, `50-`). Verifique os existentes antes de escolher o número.

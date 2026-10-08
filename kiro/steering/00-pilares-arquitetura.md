@@ -4,6 +4,8 @@ Antes de concluir qualquer criação, alteração ou revisão de código/infra, 
 
 Cada pilar tem uma skill de validação detalhada (`validacao-*`). Carregue-a quando precisar do checklist completo.
 
+> **Custo financeiro** é um pilar transversal com steering dedicado: `30-custo-finops.md`. Aplique-o sempre que uma mudança introduzir ou aumentar gasto (infra, APIs pagas, LLMs, licenças).
+
 ## Aplica-se a
 
 Criação/alteração de código, revisão de código, code review, PR/MR, git diff, auditoria ou análise de código existente. Em revisões, reporte achados por pilar com arquivo/linha e severidade.
@@ -32,7 +34,7 @@ Criação/alteração de código, revisão de código, code review, PR/MR, git d
 - **Memória**: paginação/streaming em vez de carregar tudo; cuidar vazamentos.
 - **Banco**: queries com índice; sem N+1; paginar resultados; connection pooling; sem `SELECT *` em produção.
 - **Rede**: minimizar round-trips; cache; comprimir payloads grandes; timeouts com backoff.
-- **Custo cloud**: dimensionar ao uso real; autoescala; sinalizar operações caras.
+- **Custo cloud**: dimensionar ao uso real; autoescala; sinalizar operações caras. Custo financeiro tem pilar dedicado em `30-custo-finops.md` (estimativa, orçamento, custo de terceiros/LLM, por transação).
 
 ## 4 — Observabilidade
 
@@ -108,6 +110,7 @@ Inclua ao concluir qualquer alteração. Marque ✓, N/A (com motivo) ou ⚠️ 
 | 1 | Segurança | Sem segredos; entradas validadas; DB parametrizado; authz default-deny |
 | 2 | Privacidade | PII protegida; sem PII em logs; retenção definida |
 | 3 | Infra | Complexidade/memória ok; queries indexadas/sem N+1; custo revisado |
+| 3b | Custo (FinOps) | Estimativa feita; teto/alerta de orçamento; custo de terceiros/LLM e por transação avaliados (ver `30-custo-finops.md`) |
 | 4 | Observabilidade | Logs ok; erros tratados; falhas com timeout |
 | 5 | Compatibilidade | Breaking changes identificadas; auditor executado; impacto reportado |
 | 6 | Testabilidade | Críticos testados; regressão para bugs; suíte executada |

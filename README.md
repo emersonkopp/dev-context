@@ -45,6 +45,8 @@ Arquivos Markdown lidos automaticamente pelo Kiro como contexto persistente em t
 | `00-pilares-arquitetura.md` | 12 pilares obrigatórios de arquitetura com checklist de fechamento (tabela compacta); cada pilar tem uma skill `validacao-*` de aprofundamento |
 | `10-non-functional-requirements.md` | Governança de RNFs: guardrails de custo, formato EARS, isolamento para testes e questionário de discovery |
 | `20-testing-policy.md` | TDD: ciclo Red/Green/Refactor, cobertura de edge cases, testes antes do código |
+| `30-custo-finops.md` | Pilar de custo (FinOps): estimativa prévia, teto/alertas de orçamento, custo de terceiros/LLM e por transação, tagging de alocação, trade-offs |
+| `90-principios-artefatos.md` | Princípios de efetividade e concisão para criar/editar os artefatos deste monorepo (steerings, skills, prompts), com checklist |
 
 ### kiro/skills/
 
@@ -67,6 +69,7 @@ pilares de arquitetura; as demais cobrem fluxos específicos (discovery, auto-up
 | `validacao-operabilidade-deploy` | CI/CD, rollback, feature flags, config por ambiente (12-factor) |
 | `validacao-documentacao-decisoes` | README, ADRs, runbooks |
 | `validacao-acessibilidade-i18n` | Acessibilidade (WCAG) e internacionalização (quando há UI) |
+| `revisao-codigo` | Revisão de código comparando branch de origem vs destino: valida requisitos e os pilares de arquitetura, gera relatório de pontos de melhoria com links para o código |
 | `dev-context-manager` | Gerencia este monorepo pelo chat: instalar, sincronizar, status e criação de novos artefatos via `dctx` |
 
 ### kiro/settings/
