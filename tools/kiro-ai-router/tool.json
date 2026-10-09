@@ -1,0 +1,6 @@
+{
+  "name": "kiro-ai-router",
+  "description": "MCP server local-first que delega tarefas de análise (read-only) a provedores locais/gratuitos (Ollama, Groq, OpenRouter, Gemini API).",
+  "install": "scripts/install.sh",
+  "installed_marker": ".local/share/kiro-ai-router/app/.venv"
+}

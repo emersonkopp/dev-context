@@ -71,6 +71,7 @@ pilares de arquitetura; as demais cobrem fluxos específicos (discovery, auto-up
 | `validacao-acessibilidade-i18n` | Acessibilidade (WCAG) e internacionalização (quando há UI) |
 | `revisao-codigo` | Revisão de código comparando branch de origem vs destino: valida requisitos e os pilares de arquitetura, gera relatório de pontos de melhoria com links para o código |
 | `dev-context-manager` | Gerencia este monorepo pelo chat: instalar, sincronizar, status e criação de novos artefatos via `dctx` |
+| `router-usage` | Mostra as métricas do `ai-router` (uso, taxa de sucesso, tokens estimados economizados, cotas por provedor) via tools MCP |
 
 ### kiro/settings/
 
@@ -100,6 +101,18 @@ Veja `copilot/README.md` para detalhes de uso e convenções.
 Prompts e templates independentes de ferramenta — reutilizáveis com Kiro, Copilot, Cursor, Claude, etc.
 
 Veja `shared/README.md` para convenções de nomenclatura e estrutura de cabeçalho.
+
+---
+
+## tools/
+
+Projetos de software versionados junto com os artefatos, mas **fora do fluxo `dctx install`**
+(o `dctx` só mapeia steerings/skills/settings para os destinos globais). Ferramentas aqui têm o
+próprio instalador.
+
+| Ferramenta | Descrição | Instalação |
+|---|---|---|
+| `kiro-ai-router/` | MCP server local-first que delega tarefas de análise (read-only) a provedores de IA locais/gratuitos (Ollama, Groq, OpenRouter, Gemini API), com roteamento só para provedores configurados, scanner de secrets, salvaguardas de custo e métricas locais. Expõe as tools `delegate_task`, `router_usage`, `router_insights` (ver skill `router-usage`). | `bash tools/kiro-ai-router/scripts/install.sh` |
 
 ---
 

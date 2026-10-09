@@ -1,0 +1,20 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+.testvenv/
+venv/
+env/
+
+# Build artifacts
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+
+# Local config / data (never commit secrets or state)
+config.yaml
+*.sqlite3
