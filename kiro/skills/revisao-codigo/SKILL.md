@@ -69,7 +69,8 @@ repo e, quando houver remote, o permalink com SHA:
 
 ## 5. Gerar o relatório
 
-Produza em Markdown, nesta estrutura:
+Produza em Markdown, nesta estrutura. A seção **Referências no código** é obrigatória e lista cada
+inconsistência com seu local no código-fonte (arquivo:linha + permalink).
 
 ```markdown
 # Relatório de Revisão — <origem> → <destino>
@@ -99,6 +100,15 @@ Ordenados por severidade (Crítico > Alto > Médio > Baixo).
 | 1 Segurança | ✓/⚠️/✗/N/A | ... |
 | ... | ... | ... |
 | Custo (FinOps) | ✓/⚠️/✗/N/A | ... |
+
+## Referências no código
+Consolide aqui todas as inconsistências achadas, cada uma com seu local no código-fonte. Uma linha
+por inconsistência; ordene por severidade. Todo ponto de melhoria com código relacionado DEVE
+aparecer nesta tabela.
+
+| # | Severidade | Inconsistência | Local |
+|---|---|---|---|
+| 1 | Crítico/Alto/Médio/Baixo | <resumo curto> | [`arquivo.ext:120-128`](<permalink>) |
 ```
 
 ## Regras de comportamento
@@ -108,6 +118,9 @@ Ordenados por severidade (Crítico > Alto > Médio > Baixo).
   permitidas no relatório apenas como informação (campo "Sugestão (informativa)"), nunca executadas.
   A entrega é exclusivamente o relatório.
 - **Específico.** Cada ponto identifica claramente o problema e seu impacto, com local no código.
+- **Rastreabilidade.** O relatório final sempre lista as referências no código-fonte de cada
+  inconsistência (seção "Referências no código"); nenhum achado com código relacionado fica sem
+  local (arquivo:linha + permalink).
 - **Baseado em evidência.** Toda afirmação sobre o código vem do diff/arquivos que você leu; não
   presuma comportamento que não verificou — diga o que não deu para verificar.
 - **Respeite o escopo.** Revise a mudança, não reescreva o projeto. Dívida pré-existente fora do
