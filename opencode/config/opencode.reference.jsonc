@@ -1,0 +1,41 @@
+// dev-context — config de referência para o OpenCode V2
+//
+// O [dctx](https://github.com/emersonkopp/dev-context-cli) mescla automaticamente
+// este trecho no config global (`~/.config/opencode/opencode.json(c)`);
+// merge idempotente, sem sobrescrever chaves/entradas de terceiros.
+// Fonte da verdade: este arquivo no monorepo. Não edite o destino global direto.
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // Ordem importa: em ID igual, a fonte registrada depois vence.
+  // 1) kiro/skills — 14 skills agnósticas consumidas direto do monorepo (reuso).
+  // 2) opencode/skills — variantes dev-context-manager e router-usage (sobrepõem IDs iguais).
+  "skills": [
+    "~/git/dev-context/kiro/skills",
+    "~/git/dev-context/opencode/skills",
+  ],
+
+  // Steerings (5) lidos direto do monorepo — estratégia A validada no spike
+  // (2026-10-29): glob `~` em `instructions` funciona; nada é copiado.
+  "instructions": [
+    "~/git/dev-context/kiro/steering/*.md",
+  ],
+
+  // Servidor MCP do router delegativo local-first (stdio).
+  // Instalar antes: `bash tools/kiro-ai-router/scripts/install.sh`.
+  // Registro manual equivalente:
+  //   opencode mcp add ai-router --global \
+  //     -- "$HOME/.local/share/kiro-ai-router/app/.venv/bin/python" -m kiro_ai_router.server
+  "mcp": {
+    "servers": {
+      "ai-router": {
+        "type": "local",
+        "command": [
+          "{env:HOME}/.local/share/kiro-ai-router/app/.venv/bin/python",
+          "-m",
+          "kiro_ai_router.server",
+        ],
+      },
+    },
+  },
+}

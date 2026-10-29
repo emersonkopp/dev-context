@@ -1,6 +1,6 @@
 # shared/
 
-Artefatos agnósticos de ferramenta — reutilizáveis com Kiro, Copilot, Cursor, Claude ou qualquer outra IA.
+Artefatos agnósticos de ferramenta — reutilizáveis com Kiro, Cursor, Claude ou qualquer outra IA.
 
 ## Estrutura
 
