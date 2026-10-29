@@ -41,6 +41,20 @@ e copiar `skills/` para `~/.config/opencode/skills/`. Detalhes no cabeçalho do
 arquivo de config. Não edite artefatos instalados diretamente — altere o monorepo
 e reaplique.
 
+### MCP ai-router
+
+Instale o router (`bash tools/kiro-ai-router/scripts/install.sh`) e registre:
+
+```bash
+opencode mcp add ai-router --global -- \
+  "$HOME/.local/share/kiro-ai-router/app/.venv/bin/python" -m kiro_ai_router.server
+opencode mcp list   # deve exibir "✓ ai-router  connected"
+```
+
+No chat, gerencie a conexão em `/mcps`. O `opencode.reference.jsonc` traz o mesmo
+server em `mcp.servers` — é o que o dctx usa na mescla (não sobrescreve entrada
+existente de outro dono).
+
 ## Convenções
 
 - Skill: `skills/<id-kebab-case>/SKILL.md` com frontmatter `name` (label) e
