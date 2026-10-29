@@ -1,9 +1,8 @@
 // dev-context — config de referência para o OpenCode V2
 //
-// O `dctx install` mescla este trecho em `~/.config/opencode/opencode.json(c)`,
-// expandindo para o caminho real do monorepo nesta máquina (leia de
-// `~/.dev-context/config.json`, não fixe `~/git/dev-context`).
-// Merge é idempotente e não sobrescreve chaves/entradas de terceiros.
+// O [dctx](https://github.com/emersonkopp/dev-context-cli) mescla automaticamente
+// este trecho no config global (`~/.config/opencode/opencode.json(c)`);
+// merge idempotente, sem sobrescrever chaves/entradas de terceiros.
 // Fonte da verdade: este arquivo no monorepo. Não edite o destino global direto.
 {
   "$schema": "https://opencode.ai/config.json",

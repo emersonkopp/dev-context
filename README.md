@@ -2,8 +2,8 @@
 
 Monorepo de artefatos de IA: steerings, settings, prompts, instruções e agentes customizados para múltiplas ferramentas. Serve como fonte da verdade para configurações globais reutilizáveis entre máquinas e projetos.
 
-> **Gerenciado pelo [dctx](https://github.com/emersonkopp/dev-context-cli)** — o CLI que instala,
-> sincroniza e mantém estes artefatos atualizados em cada máquina. Veja [Manutenção via dctx](#manutenção-via-dctx-recomendado).
+> O [dctx](https://github.com/emersonkopp/dev-context-cli) instala, sincroniza e mantém
+> estes artefatos em cada máquina — documentação e processo no próprio projeto.
 
 ## Ferramentas suportadas
 
@@ -100,9 +100,8 @@ Veja `shared/README.md` para convenções de nomenclatura e estrutura de cabeça
 
 ## tools/
 
-Projetos de software versionados junto com os artefatos, mas **fora do fluxo `dctx install`**
-(o `dctx` só mapeia steerings/skills/settings para os destinos globais). Ferramentas aqui têm o
-próprio instalador.
+Projetos de software versionados junto com os artefatos, mas **fora do fluxo de
+instalação do dctx**. Ferramentas aqui têm o próprio instalador.
 
 | Ferramenta | Descrição | Instalação |
 |---|---|---|
@@ -110,37 +109,14 @@ próprio instalador.
 
 ---
 
-## Manutenção via dctx (recomendado)
-
-Este monorepo é gerenciado pelo CLI **[dctx](https://github.com/emersonkopp/dev-context-cli)**, que
-instala os artefatos nas localizações globais corretas, mantém tudo sincronizado com o GitHub e
-remove artefatos órfãos (renomeados/removidos) automaticamente.
-
-```bash
-# Primeira vez em uma máquina nova (instala o dctx + clona + configura tudo)
-curl -fsSL https://raw.githubusercontent.com/emersonkopp/dev-context-cli/main/install.sh | bash
-
-# No dia a dia
-dctx status     # o que está instalado e atualizado
-dctx install    # aplica os artefatos do monorepo no ambiente (idempotente; remove órfãos)
-dctx sync       # pull/push do monorepo com o GitHub
-```
-
-> **Skills de organização/cliente** mantidas apenas localmente (fora deste repo) **não** são
-> tocadas pelo `dctx` — ele só gerencia o que vem do monorepo.
-
 ## Setup em uma nova máquina
 
-### Kiro (recomendado: via dctx)
+### Kiro
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/emersonkopp/dev-context-cli/main/install.sh | bash
-```
+Instalação e sincronização automáticas: [dctx](https://github.com/emersonkopp/dev-context-cli)
+(documentação e processo no próprio projeto).
 
-Isso instala steerings, skills e settings do Kiro automaticamente. Para re-aplicar depois de um
-`git pull` no monorepo: `dctx install`.
-
-### Kiro (alternativa manual, sem dctx)
+### Kiro (manual)
 
 ```bash
 # Clonar
@@ -157,20 +133,14 @@ cp -r ~/git/dev-context/kiro/skills/* ~/.kiro/skills/
 cp ~/git/dev-context/kiro/settings/cli.json ~/.kiro/settings/cli.json
 ```
 
-> A via manual não remove artefatos órfãos (renomeados/removidos). Prefira o `dctx` para isso.
+> A via manual não remove artefatos órfãos (renomeados/removidos).
 
-### OpenCode (recomendado: via dctx)
+### OpenCode
 
-```bash
-# dctx aplica skills variantes, registra steerings (via instructions) e o
-# MCP ai-router na config global do OpenCode
-dctx install
-dctx status
-```
+Instalação e sincronização automáticas: [dctx](https://github.com/emersonkopp/dev-context-cli)
+(documentação e processo no próprio projeto).
 
-Depois de um `git pull` no monorepo: `dctx install`.
-
-### OpenCode (alternativa manual, sem dctx)
+### OpenCode (manual)
 
 ```bash
 # Copiar skills variantes
@@ -202,7 +172,6 @@ As seguintes configurações contêm credenciais ou são específicas de cada am
 1. Crie `kiro/steering/nome.md`
 2. Inclua regras claras e acionáveis com cabeçalho `#` descrevendo o propósito
 3. Atualize a tabela acima neste README
-4. Sincronize: `dctx install` (aplica no ambiente e remove órfãos)
 
 ### Adicionar uma skill do Kiro
 
@@ -210,11 +179,9 @@ As seguintes configurações contêm credenciais ou são específicas de cada am
 2. Inicie o arquivo com frontmatter YAML (`name` e `description`); a `description` deve conter
    gatilhos claros, pois determina quando a skill é carregada sob demanda
 3. Atualize a tabela de skills acima neste README
-4. Sincronize: `dctx install`
 
 > **Nota:** skills específicas de uma organização/cliente (ex.: contratos internos) **não** devem
-> ir para este repositório — mantenha-as apenas localmente em `~/.kiro/skills/`. O `dctx` não as
-> remove, pois só gerencia o que vem do monorepo.
+> ir para este repositório — mantenha-as apenas localmente em `~/.kiro/skills/`.
 
 ### Adicionar um prompt compartilhado
 

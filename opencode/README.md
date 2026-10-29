@@ -24,7 +24,7 @@ opencode/
 |---|---|---|
 | Steerings (5) | `kiro/steering/*.md` | `instructions` com glob no config global — nada é copiado |
 | Skills agnósticas (14) | `kiro/skills/*/SKILL.md` | array `skills` apontando `~/git/dev-context/kiro/skills` |
-| Skills variantes (2) | `opencode/skills/*/SKILL.md` | copiadas para `~/.config/opencode/skills/` via `dctx install` |
+| Skills variantes (2) | `opencode/skills/*/SKILL.md` | instaladas em `~/.config/opencode/skills/` (pelo dctx) |
 | MCP `ai-router` | `tools/kiro-ai-router/` | `mcp.servers` no config global |
 
 **Variantes sobrepõem originais**: a array `skills` lista `kiro/skills` antes e
@@ -34,7 +34,8 @@ seguem de `kiro/skills/` sem duplicação.
 
 ## Setup
 
-Recomendado: `dctx install` (aplica skills e mescla config) e `dctx status`.
+Automático: [dctx](https://github.com/emersonkopp/dev-context-cli) instala as skills
+e mescla a config — documentação e processo no próprio projeto.
 
 Manual: mesclar `config/opencode.reference.jsonc` em `~/.config/opencode/opencode.json(c)`
 e copiar `skills/` para `~/.config/opencode/skills/`. Detalhes no cabeçalho do
@@ -52,8 +53,7 @@ opencode mcp list   # deve exibir "✓ ai-router  connected"
 ```
 
 No chat, gerencie a conexão em `/mcps`. O `opencode.reference.jsonc` traz o mesmo
-server em `mcp.servers` — é o que o dctx usa na mescla (não sobrescreve entrada
-existente de outro dono).
+server em `mcp.servers` (merge idempotente, sem sobrescrever entradas de terceiros).
 
 ## Convenções
 
