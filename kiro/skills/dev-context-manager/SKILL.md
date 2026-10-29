@@ -1,7 +1,7 @@
 ---
 name: dev-context-manager
-description: Gerencia o monorepo dev-context e os artefatos de IA instalados nesta máquina. Use quando o usuário quiser instalar, atualizar ou sincronizar steerings, skills, settings e prompts; criar um novo steering, skill, instrução do Copilot ou prompt; verificar o que está instalado e desatualizado; sincronizar mudanças com o GitHub; ou atualizar o próprio dctx CLI.
-triggers: instalar artefatos, instalar steerings, instalar skills, sincronizar dev-context, sync dev-context, status dev-context, criar steering, novo steering, criar skill, nova skill, criar instrução copilot, criar prompt, atualizar dctx, update dctx, dev-context status, o que está instalado, o que está desatualizado
+description: Gerencia o monorepo dev-context e os artefatos de IA instalados nesta máquina. Use quando o usuário quiser instalar, atualizar ou sincronizar steerings, skills, settings e prompts; criar um novo steering, skill ou prompt; verificar o que está instalado e desatualizado; sincronizar mudanças com o GitHub; ou atualizar o próprio dctx CLI.
+triggers: instalar artefatos, instalar steerings, instalar skills, sincronizar dev-context, sync dev-context, status dev-context, criar steering, novo steering, criar skill, nova skill, criar prompt, atualizar dctx, update dctx, dev-context status, o que está instalado, o que está desatualizado
 ---
 
 # dev-context-manager
@@ -17,8 +17,6 @@ Você é o gerenciador do monorepo `dev-context` e dos artefatos de IA desta má
   kiro/steering/    → ~/.kiro/steering/         (steerings globais)
   kiro/skills/*/    → ~/.kiro/skills/*/          (skills carregadas sob demanda)
   kiro/settings/    → ~/.kiro/settings/          (configurações sem credenciais)
-  copilot/instructions/                          (instruções do GitHub Copilot)
-  copilot/prompts/                               (prompt files do Copilot)
   shared/prompts/                                (prompts agnósticos de ferramenta)
   ```
 
@@ -85,7 +83,7 @@ Baixa e substitui o binário em-place para a versão mais recente.
 
 ### 5. Criar um novo steering
 
-> **Antes de criar ou editar qualquer artefato (operações 5 a 8)**, aplique os princípios de
+> **Antes de criar ou editar qualquer artefato (operações 5 a 7)**, aplique os princípios de
 > `kiro/steering/90-principios-artefatos.md`: responsabilidade única, texto acionável e conciso,
 > sem redundância (referencie outros artefatos em vez de copiar), gatilhos reais em skills e saída
 > esperada definida. Rode o checklist desse steering antes de salvar.
@@ -135,20 +133,7 @@ Skills são guias carregados sob demanda quando o tema é relevante. A `descript
 5. Rode `dctx sync` para enviar ao GitHub
 6. Atualize a tabela de skills no `README.md` do monorepo
 
-### 7. Criar instruções do Copilot
-
-1. Crie `copilot/instructions/nome.md` no monorepo
-2. Instrua o usuário a referenciar em `.github/copilot-instructions.md` do projeto, ou no VS Code settings:
-   ```json
-   {
-     "github.copilot.chat.codeGeneration.instructions": [
-       { "file": "~/git/dev-context/copilot/instructions/nome.md" }
-     ]
-   }
-   ```
-3. Rode `dctx sync` para enviar ao GitHub
-
-### 8. Criar um prompt compartilhado
+### 7. Criar um prompt compartilhado
 
 1. Crie `shared/prompts/<categoria>-<nome>.md` com cabeçalho:
    ```markdown

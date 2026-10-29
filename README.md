@@ -10,7 +10,6 @@ Monorepo de artefatos de IA: steerings, settings, prompts, instruções e agente
 | Diretório | Ferramenta |
 |---|---|
 | `kiro/` | [Kiro](https://kiro.dev) — CLI de IA para desenvolvimento |
-| `copilot/` | [GitHub Copilot](https://github.com/features/copilot) |
 | `shared/` | Agnóstico — funciona com qualquer ferramenta |
 
 ## Estrutura
@@ -24,9 +23,6 @@ dev-context/
 │   ├── agents/
 │   │   └── custom/     # Definições de agentes customizados
 │   └── prompts/        # Templates de prompts específicos do Kiro
-├── copilot/
-│   ├── instructions/   # Arquivos de instruções personalizadas
-│   └── prompts/        # Prompt files (.prompt.md) para Copilot Chat
 ├── shared/
 │   └── prompts/        # Templates agnósticos de ferramenta
 └── docs/               # Documentação e guias gerais
@@ -87,18 +83,9 @@ Definições de agentes customizados. Cada subdiretório é um agente com config
 
 ---
 
-## copilot/
-
-Veja `copilot/README.md` para detalhes de uso e convenções.
-
-- **`instructions/`** — instruções personalizadas para referenciar em `.github/copilot-instructions.md` ou via VS Code settings.
-- **`prompts/`** — arquivos `.prompt.md` para Copilot Chat.
-
----
-
 ## shared/
 
-Prompts e templates independentes de ferramenta — reutilizáveis com Kiro, Copilot, Cursor, Claude, etc.
+Prompts e templates independentes de ferramenta — reutilizáveis com Kiro, Cursor, Claude, etc.
 
 Veja `shared/README.md` para convenções de nomenclatura e estrutura de cabeçalho.
 
@@ -165,19 +152,6 @@ cp ~/git/dev-context/kiro/settings/cli.json ~/.kiro/settings/cli.json
 
 > A via manual não remove artefatos órfãos (renomeados/removidos). Prefira o `dctx` para isso.
 
-### Copilot (VS Code)
-
-```bash
-# Instruções globais via settings.json do VS Code
-# Adicione em ~/.config/Code/User/settings.json (Linux) ou
-# ~/Library/Application Support/Code/User/settings.json (macOS):
-{
-  "github.copilot.chat.codeGeneration.instructions": [
-    { "file": "~/git/dev-context/copilot/instructions/nome.md" }
-  ]
-}
-```
-
 ### Configurações que NÃO estão neste repositório
 
 As seguintes configurações contêm credenciais ou são específicas de cada ambiente:
@@ -185,7 +159,6 @@ As seguintes configurações contêm credenciais ou são específicas de cada am
 | Ferramenta | Como configurar |
 |---|---|
 | Kiro | `kiro login` — token armazenado em `~/.kiro/crew/` |
-| GitHub Copilot | `gh auth login` — token gerenciado pelo keychain do SO |
 | AWS | `aws configure` ou variáveis `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` |
 | APIs de terceiros | Variáveis de ambiente ou gerenciador de segredos do SO |
 
@@ -211,12 +184,6 @@ As seguintes configurações contêm credenciais ou são específicas de cada am
 > **Nota:** skills específicas de uma organização/cliente (ex.: contratos internos) **não** devem
 > ir para este repositório — mantenha-as apenas localmente em `~/.kiro/skills/`. O `dctx` não as
 > remove, pois só gerencia o que vem do monorepo.
-
-### Adicionar instruções do Copilot
-
-1. Crie `copilot/instructions/nome.md`
-2. Documente o contexto de uso no cabeçalho
-3. Referencie nos projetos via `.github/copilot-instructions.md` ou VS Code settings
 
 ### Adicionar um prompt compartilhado
 
