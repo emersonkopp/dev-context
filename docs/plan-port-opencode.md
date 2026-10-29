@@ -198,8 +198,8 @@ Aceite: `dctx install` em máquina fresca reproduz a Fase 2 sem edição manual.
 | 2026-10-29 | Port aprovado; artefatos originais intactos, exceto T0 | usuário |
 | 2026-10-29 | Copilot removido antes de tudo (nunca usado; exemplo) | usuário |
 | 2026-10-29 | Branch de trabalho `feat/port-opencode`; plano/tasks commitados antes da execução | usuário |
-| **pendente** | Estratégia steerings A/B/C | F0 |
-| **pendente** | Mesclar `triggers` na `description` das variantes | F1 |
+| 2026-10-29 | **Estratégia A eleita** — glob `~` em `instructions` + array `skills` de reuso, validados na sessão viva (recarga de config) | F0 |
+| 2026-10-29 | `triggers` mesclado na `description` das variantes (OpenCode ignora a chave) | F1 |
 
 ## 7. Riscos e mitigação
 
@@ -220,3 +220,19 @@ Aceite: `dctx install` em máquina fresca reproduz a Fase 2 sem edição manual.
 - `git grep -i copilot` = zero.
 - `kiro/`, `shared/`, `tools/` intocados exceto T0; `git status` limpo fora de
   `opencode/`, `docs/`, `README.md`.
+
+## 9. Log de execução (2026-10-29)
+
+| Fase | Commit | Resultado |
+|---|---|---|
+| T0 — Remoção Copilot | `4b9d104` | 3 arquivos removidos + 4 editados; `git grep -i copilot` zero fora de docs/ |
+| F0 — Spike | (sem repo) | Glob `~` + reuso de skills aprovados; config global restaurada; reversibilidade provada |
+| F1 — Namespace | `2663ba5` | `opencode/README.md` + 2 skills variantes + 3 dirs reservados |
+| F2 — Config + MCP | `7ce4afd` | `opencode/config/opencode.reference.jsonc` + setup/MCP no `opencode/README.md` |
+| F3 — dctx | **pendente** | Repo externo `dev-context-cli`: mappings `opencode/*`, merge de config, `status`, checagem de copilot |
+| F4 — Docs | (este commit) | README raiz com `opencode/`; decisões preenchidas; tasks refletidas |
+
+Desvios do plano: (1) evidência do spike veio da recarga da própria sessão — mais
+forte que `opencode run` dedicado; (2) `mcp.servers` usa `{env:HOME}` em vez de `~`
+(não expandido em `command` no OpenCode); (3) `opencode/instructions/` permanece
+reservado (vazio) — a estratégia A não exige cópia.

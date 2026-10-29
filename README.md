@@ -10,6 +10,7 @@ Monorepo de artefatos de IA: steerings, settings, prompts, instruções e agente
 | Diretório | Ferramenta |
 |---|---|
 | `kiro/` | [Kiro](https://kiro.dev) — CLI de IA para desenvolvimento |
+| `opencode/` | [OpenCode](https://opencode.ai) — V2 |
 | `shared/` | Agnóstico — funciona com qualquer ferramenta |
 
 ## Estrutura
@@ -23,6 +24,12 @@ dev-context/
 │   ├── agents/
 │   │   └── custom/     # Definições de agentes customizados
 │   └── prompts/        # Templates de prompts específicos do Kiro
+├── opencode/
+│   ├── skills/         # Skills variantes OpenCode (sobrepõem IDs de kiro/skills)
+│   ├── instructions/   # reservado — steerings são reusados de kiro/steering/
+│   ├── agents/         # reservado — agentes (*.md + frontmatter) no futuro
+│   ├── commands/       # reservado — comandos (prompt templates) no futuro
+│   └── config/         # opencode.reference.jsonc — mesclado no config global
 ├── shared/
 │   └── prompts/        # Templates agnósticos de ferramenta
 └── docs/               # Documentação e guias gerais
@@ -151,6 +158,30 @@ cp ~/git/dev-context/kiro/settings/cli.json ~/.kiro/settings/cli.json
 ```
 
 > A via manual não remove artefatos órfãos (renomeados/removidos). Prefira o `dctx` para isso.
+
+### OpenCode (recomendado: via dctx)
+
+```bash
+# dctx aplica skills variantes, registra steerings (via instructions) e o
+# MCP ai-router na config global do OpenCode
+dctx install
+dctx status
+```
+
+Depois de um `git pull` no monorepo: `dctx install`.
+
+### OpenCode (alternativa manual, sem dctx)
+
+```bash
+# Copiar skills variantes
+mkdir -p ~/.config/opencode/skills
+cp -r ~/git/dev-context/opencode/skills/* ~/.config/opencode/skills/
+
+# Steerings + reuso das skills agnósticas + MCP ai-router:
+# mesclar opencode/config/opencode.reference.jsonc em ~/.config/opencode/opencode.json(c)
+```
+
+Detalhes de reuso/convenções: `opencode/README.md`.
 
 ### Configurações que NÃO estão neste repositório
 

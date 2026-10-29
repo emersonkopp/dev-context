@@ -2,78 +2,88 @@
 
 > Checklist operacional do plano `docs/plan-port-opencode.md`.
 > Regra: **1 fase = 1 commit** (mensagens conventional commits, PT).
-> Nenhuma fase inicia sem a anterior estar marcada como concluída
-> (exceto F3, dependente só de T0 dentro da F2).
+> Estado em 2026-10-29: **T0, F0, F1, F2 e F4 concluídas**; **F3 (dctx) pendente**
+> (repo externo `dev-context-cli`, PR próprio).
 
-## Tarefa 0 — Remoção Copilot ✅ nenhuma
+## Tarefa 0 — Remoção Copilot ✅ (commit `4b9d104`)
 
-- [ ] `git rm -r copilot/` (README.md, instructions/.gitkeep, prompts/.gitkeep)
-- [ ] `README.md` raiz: remover 6 trechos (tabela de ferramentas; árvore; seção
-      `## copilot/`; "Copilot" na frase de `shared/`; "Copilot (VS Code)" no setup;
-      linha `GitHub Copilot` em credenciais; "Adicionar instruções do Copilot")
-- [ ] `kiro/skills/dev-context-manager/SKILL.md`: description sem "instrução do
-      Copilot"; trigger "criar instrução copilot" removido; 2 linhas de `copilot/`
-      no mapa; Operação 7 removida; 8→7; "(operações 5 a 8)"→"(operações 5 a 7)"
-- [ ] `shared/README.md`: "Copilot" fora da enumeração (linha 3)
-- [ ] Checklist externo anotado no commit: verificar `settings.json` do VS Code
-      local (referência manual a `copilot/instructions`)
-- [ ] Verificação: `git grep -i copilot` = zero resultado
+- [x] `git rm -r copilot/` (README.md, instructions/.gitkeep, prompts/.gitkeep)
+- [x] `README.md` raiz: 7 trechos removidos (tabela, árvore, seção `## copilot/`,
+      "Copilot" na frase de `shared/`, "Copilot (VS Code)", linha `GitHub Copilot`
+      em credenciais, "Adicionar instruções do Copilot")
+- [x] `kiro/skills/dev-context-manager/SKILL.md`: description/triggers limpos; mapa
+      sem `copilot/`; Operação 7 removida; 8→7; "(operações 5 a 7)"
+- [x] `shared/README.md`: "Copilot" fora da enumeração
+- [x] Checklist externo anotado no PR: verificar `settings.json` do VS Code local
+      (referência manual a `copilot/instructions`)
+- [x] Verificação refinada: `git grep -i copilot` = **zero fora de
+      `docs/plan-*`/`docs/tasks-*`** (registros históricos do plano)
 
-**Commit:** `chore: remove copilot (nunca usado; apenas exemplo)`
+> Nota de execução: o 1º commit da T0 pegou só os `git rm` (edições de texto
+> unstaged); corrigido via `fixup` + rebase — tudo consolidado no `4b9d104`.
 
-## Fase 0 — Spike de validação (sem repo) ✅ nenhuma
+## Fase 0 — Spike de validação ✅ (sem mudanças no repo; config local revertida)
 
-- [ ] Backup de `~/.config/opencode/opencode.json`
-- [ ] 0.1 glob `~` em `instructions` → modelo cita TDD + EARS
-- [ ] 0.2 `skills`: `~/git/dev-context/kiro/skills` → `validacao-seguranca` carrega
-- [ ] 0.3 IDs/precedência dos 16 skills sem conflito
-- [ ] 0.4 se falhou 0.1: teste path absoluto; persistindo falha → estratégia C
-- [ ] Restaurar/limpar config temporária; registrar estratégia eleita
+- [x] Backup de `~/.config/opencode/opencode.jsonc` (restaurado após testes)
+- [x] 0.1 glob `~` em `instructions` → **aprovado**: ao salvar a config, a sessão
+      viva injetou os 5 steerings (`~/git/dev-context/kiro/steering/*.md`)
+- [x] 0.2 reuso de skills → **aprovado**: skill `validacao-seguranca` carregada via
+      tool `skill` com base directory no monorepo
+- [x] 0.3 IDs/precedência → **aprovado**: 16 IDs anunciados no `<available_skills>`
+- [x] 0.4 fallbacks — **desnecessário** (0.1 ok de primeira)
+- [x] Config global restaurada (a sessão corrente reverteu os artefatos ao vivo —
+      reversibilidade provada); backup `.spike-backup` removido
 
-**Commit (docs):** `docs: registra decisão do spike (estratégia steerings)` — só
-se houver mudança no plano; spike em si não toca no repo.
+**Decisão registrada: estratégia A.** Evidência obtida na própria sessão (recarga de
+config), sem necessidade de `opencode run` dedicado.
 
-## Fase 1 — Namespace `opencode/` ✅ nenhuma
+## Fase 1 — Namespace `opencode/` ✅ (commit `2663ba5`)
 
-- [ ] `opencode/README.md`: convenções, tabela de artefatos, reuso (skills 14
-      agnósticas lidas de `kiro/skills/` via config), setup manual
-- [ ] `opencode/skills/dev-context-manager/SKILL.md` (variante; original intacto)
-- [ ] `opencode/skills/router-usage/SKILL.md` (variante; original intacto)
-- [ ] `opencode/instructions/.gitkeep` (ou conteúdo real se estratégia C)
-- [ ] `opencode/agents/.gitkeep`, `opencode/commands/.gitkeep` (vazios por ora)
-- [ ] Originais `kiro/` intocados: `git status` confere
+- [x] `opencode/README.md`: convenções, tabela de artefatos, reuso, setup, MCP
+- [x] `opencode/skills/dev-context-manager/SKILL.md` (variante; original intacto)
+- [x] `opencode/skills/router-usage/SKILL.md` (variante; original intacto)
+- [x] `opencode/instructions/.gitkeep` (estratégia A → diretório fica reservado)
+- [x] `opencode/agents/.gitkeep`, `opencode/commands/.gitkeep`
+- [x] Originais `kiro/` intocados (exceto itens da T0)
 
-**Commit:** `feat(opencode): cria namespace com variantes de skills`
+## Fase 2 — Config de referência + MCP ✅ (commit `7ce4afd`)
 
-## Fase 2 — Config de referência + MCP ✅ nenhuma
+- [x] `opencode/config/opencode.reference.jsonc` (`skills` na ordem de
+      precedência; `instructions` com glob `~`; `mcp.servers.ai-router` com
+      `{env:HOME}` — `~` não é expandido em `command` do OpenCode)
+- [x] Setup manual + `opencode mcp add ai-router --global -- …` documentados
+      no `opencode/README.md`
+- [x] Follow-up registrado: script `configure_opencode.py` em `tools/kiro-ai-router/`
+      (separado; não executado neste port)
 
-- [ ] `opencode/config/opencode.reference.jsonc` (skills × ordem; instructions
-      conforme estratégia eleita; `mcp.servers.ai-router`)
-- [ ] Setup manual documentado no `opencode/README.md` (incl.
-      `opencode mcp add ai-router --global -- …`)
-- [ ] Registro de follow-up: `configure_opencode.py` em `tools/kiro-ai-router/`
-      (separado; não executa agora)
-
-**Commit:** `feat(opencode): config de referência e MCP ai-router`
-
-## Fase 3 — dctx (repo separado `dev-context-cli`, PR próprio) ✅ nenhuma
+## Fase 3 — dctx (repo separado `dev-context-cli`, PR próprio) ⏳ pendente
 
 - [ ] Mapping `opencode/skills/*` → `~/.config/opencode/skills/*` + órfãos
-- [ ] Estratégia steerings (A: `instructions`; C: concatenação `AGENTS.md`)
-- [ ] Merge idempotente nas arrays de `~/.config/opencode/opencode.json`
+- [ ] Estratégia A: manter entradas `instructions` no config global (merge idempotente)
+- [ ] Merge das arrays `skills`/`instructions` sem sobrescrever chaves de terceiros
 - [ ] `dctx status` com segmento `opencode/` (`✓/⚠️/✗`)
-- [ ] Entrada MCP `ai-router` quando instalador do router detectar OpenCode
+- [ ] Entrada MCP `ai-router` quando o dctx mesclar a config
 - [ ] Confirmar ausência de segmento copilot no CLI
 
 **Aceite:** `dctx install` em máquina fresca reproduz a Fase 2 sem edição manual.
 
-## Fase 4 — Verificação + docs finais ✅ nenhuma
+## Fase 4 — Verificação + docs finais ✅ (este commit)
 
-- [ ] Matriz de teste: 16 skills listáveis; TDD/EARS/FinOps citados em sessão
-      nova; variantes disparam por gatilho; `dctx status` exibe `opencode`;
-      `ai-router` conectado e `router-usage` funcional
-- [ ] `README.md` raiz: adicionar apenas linha/árvore/bloco de `opencode/`
-- [ ] Nota de decisão (estratégia eleita) em `docs/`
-- [ ] `docs/plan-port-opencode.md`: preencher decisões pendentes da seção 6
+- [x] README raiz: `opencode/` na tabela, árvore e seção Setup (via dctx + manual)
+- [x] `docs/plan-port-opencode.md`: decisões pendentes preenchidas + log de execução
+- [x] Linha de commit da F4 redefinida no próprio doc (mensagem definitiva abaixo)
+- [x] Verificação estática concluída (ver matriz parcial abaixo)
 
-**Commit:** `docs: port opencode concluído (suprime pendências)`
+**Commit:** `docs: conclui port opencode no monorepo (dctx pendente)`
+
+### Matriz de verificação executável nesta sessão
+
+| Item | Resultado |
+|---|---|
+| Glob `~` em `instructions` carrega 5 steerings | ✅ F0 (recarga viva da sessão) |
+| 16 skills anunciados a partir do monorepo | ✅ F0 |
+| Skill agnóstica carrega conteúdo do monorepo | ✅ F0 (`validacao-seguranca`) |
+| `git grep -i copilot` zero fora de docs | ✅ |
+| Skills variantes listadas em `~/.config/opencode/` | ⏳ pós-F3 (dctx) — hoje manual |
+| MCP `ai-router` conectado no OpenCode | ⏳ pós-instalação do router nesta máquina |
+| `dctx status` exibe segmento `opencode/` | ⏳ F3 |
